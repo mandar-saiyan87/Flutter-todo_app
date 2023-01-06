@@ -34,7 +34,14 @@ class Home extends StatelessWidget {
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                       ),
-                      for (ToDo todo in todoList) TodoItem(todo: todo),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: todoList.length,
+                        itemBuilder: (context, index) {
+                          return TodoItem(todo: todoList[index]);
+                        },
+                      ),
+                      // for (ToDo todo in todoList) TodoItem(todo: todo),
                     ],
                   ),
                 ),
@@ -135,3 +142,21 @@ class Home extends StatelessWidget {
     );
   }
 }
+
+
+
+                // Expanded(
+                //   child: ListView(
+                //     children: [
+                //       Container(
+                //         margin: EdgeInsets.only(top: 50, bottom: 20),
+                //         child: Text(
+                //           'All ToDos',
+                //           style: TextStyle(
+                //               fontSize: 22, fontWeight: FontWeight.w500),
+                //         ),
+                //       ),
+                //       for (ToDo todo in todoList) TodoItem(todo: todo),
+                //     ],
+                //   ),
+                // ),
