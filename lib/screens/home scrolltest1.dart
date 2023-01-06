@@ -30,8 +30,7 @@ class _HomeState extends State<Home> {
               children: [
                 searchBox(),
                 Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
+                  child: Column(
                     children: [
                       Container(
                         margin: EdgeInsets.only(top: 50, bottom: 20),
@@ -41,12 +40,24 @@ class _HomeState extends State<Home> {
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                       ),
-                      for (ToDo todo in todoList)
-                        TodoItem(
-                          todo: todo,
-                          onTodoChange: _handleToDoChange,
-                          onDeleteTodo: _deleteTodoItem,
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: todoList.length,
+                          itemBuilder: (context, index) {
+                            return TodoItem(
+                              todo: todoList[index],
+                              onTodoChange: _handleToDoChange,
+                              onDeleteTodo: _deleteTodoItem,
+                            );
+                          },
                         ),
+                      ),
+                      // for (ToDo todo in todoList)
+                      //   TodoItem(
+                      //     todo: todo,
+                      //     onTodoChange: _handleToDoChange,
+                      //     onDeleteTodo: _deleteTodoItem,
+                      //   ),
                     ],
                   ),
                 ),

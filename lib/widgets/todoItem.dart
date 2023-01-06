@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, sort_child_properties_last, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, sort_child_properties_last, avoid_print, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
 import 'package:todo_app/constants/colors.dart';
@@ -7,7 +7,14 @@ import '../model/todo.dart';
 
 class TodoItem extends StatelessWidget {
   final ToDo todo;
-  const TodoItem({super.key, required this.todo});
+  final onTodoChange;
+  final onDeleteTodo;
+
+  const TodoItem(
+      {super.key,
+      required this.todo,
+      this.onTodoChange,
+      required this.onDeleteTodo});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +23,7 @@ class TodoItem extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         onTap: () {
-          print('Clicked todo');
+          onTodoChange(todo);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -43,7 +50,7 @@ class TodoItem extends StatelessWidget {
           ),
           child: IconButton(
             onPressed: () {
-              print('Clicked Delete');
+              onDeleteTodo(todo.id);
             },
             icon: Icon(Icons.delete),
             iconSize: 17,
