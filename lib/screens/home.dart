@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, prefer_const_constructors_in_immutables, unused_element, unused_field
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, prefer_const_constructors_in_immutables, unused_element, unused_field, prefer_final_fields, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:todo_app/constants/colors.dart';
@@ -16,6 +16,15 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final todoList = ToDo.todoList();
   final _todoController = TextEditingController();
+  List<ToDo> _foundTodo = [];
+
+  @override
+  void initState() {
+    // ignore: todo
+    // TODO: implement initState
+    super.initState();
+    _foundTodo = todoList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +50,7 @@ class _HomeState extends State<Home> {
                               fontSize: 22, fontWeight: FontWeight.w500),
                         ),
                       ),
-                      for (ToDo todo in todoList)
+                      for (ToDo todo in _foundTodo.reversed)
                         TodoItem(
                           todo: todo,
                           onTodoChange: _handleToDoChange,
@@ -117,12 +126,29 @@ class _HomeState extends State<Home> {
   }
 
   void _addTodoItem(String todo) {
-    setState(() {
-      todoList.add(ToDo(
-          id: DateTime.now().microsecondsSinceEpoch.toString(),
-          todoText: todo));
-    });
+    if (todo.isNotEmpty) {
+      setState(() {
+        todoList.add(ToDo(
+            id: DateTime.now().microsecondsSinceEpoch.toString(),
+            todoText: todo));
+      });
+    }
     _todoController.clear();
+  }
+
+  void _searchTodo(String todoSearch) {
+    List<ToDo> results = [];
+    if (todoSearch.isEmpty) {
+      results = todoList;
+    } else {
+      results = todoList
+          .where((item) =>
+              item.todoText!.toLowerCase().contains(todoSearch.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      _foundTodo = results;
+    });
   }
 
   Widget searchBox() {
@@ -133,6 +159,7 @@ class _HomeState extends State<Home> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
+        onChanged: (value) => _searchTodo(value),
         decoration: InputDecoration(
             contentPadding: EdgeInsets.all(0),
             prefixIcon: Icon(
